@@ -1,0 +1,21 @@
+name: Dependabot auto merge
+
+on:
+  check_suite:
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  dependabot-auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Run own action
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: '@economic/platform'

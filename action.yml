@@ -1,0 +1,20 @@
+description: GitHub Action that automatically merges Dependabot PRs
+inputs:
+  github_user:
+    description: Github user supported by action. Defaults to dependabot
+    required: false
+    default: dependabot[bot]
+  github_token:
+    description: Token for action
+    required: true
+  semver_match:
+    description: major, minor or patch
+    required: false
+    default: patch
+  reviewers:
+    description: Reviewers to add to PR in case auto merge is not possible
+    required: false
+name: Dependabot auto merge
+runs:
+  main: dist/index.js
+  using: node12
