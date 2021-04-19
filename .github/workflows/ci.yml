@@ -1,13 +1,26 @@
 name: Continuous Integration
 on: 
   pull_request:
+    branches:
+      - main
 
 jobs:
-  test:
+  continuous-integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm ci
-      - run: |
-          npm run workflow:ci
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Select Node.js version
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-progress --prefer-offline
+      - name: Run workflow:ci
+        run: npm run workflow:ci
+      - name: Run action
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

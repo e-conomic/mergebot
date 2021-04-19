@@ -16,10 +16,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      githubToken: 'githubToken',
-      githubUser: 'dependabot[bot]',
+      gitHubToken: 'githubToken',
+      gitHubUser: 'dependabot[bot]',
       label: 'automerge',
-      semverMatch: 'minor'
+      semVerMatch: 'minor'
     }
 
     const result = shouldProcess(internalContext)
@@ -40,10 +40,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      githubToken: 'githubToken',
-      githubUser: 'dependabot[bot]',
+      gitHubToken: 'githubToken',
+      gitHubUser: 'dependabot[bot]',
       label: 'automerge',
-      semverMatch: 'minor'
+      semVerMatch: 'minor'
     }
 
     const result = shouldProcess(internalContext)
@@ -64,10 +64,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      githubToken: 'githubToken',
-      githubUser: 'dependabot[bot]',
+      gitHubToken: 'githubToken',
+      gitHubUser: 'dependabot[bot]',
       label: 'automerge',
-      semverMatch: 'minor'
+      semVerMatch: 'minor'
     }
 
     const result = shouldProcess(internalContext)
@@ -88,10 +88,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      githubToken: 'githubToken',
-      githubUser: 'dependabot[bot]',
+      gitHubToken: 'githubToken',
+      gitHubUser: 'dependabot[bot]',
       label: 'automerge',
-      semverMatch: 'minor'
+      semVerMatch: 'minor'
     }
 
     const result = shouldProcess(internalContext)
