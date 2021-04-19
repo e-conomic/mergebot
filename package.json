@@ -15,7 +15,7 @@
     "test:ci": "npm run test -- --ci",
     "test:coverage": "npm run test -- --collect-coverage",
     "test:watch": "npm run test:coverage -- --watch --verbose false",
-    "workflow:ci": "npm run build && npm run lint && npm run package && npm test:ci",
+    "workflow:ci": "npm run build && npm run lint && npm run package && npm run test:ci",
     "prepare": "husky install",
     "husky:pre-commit": "npm run test && lint-staged"
   },
