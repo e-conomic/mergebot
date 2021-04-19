@@ -19,5 +19,5 @@ inputs:
     default: 'dependencies'
 name: 'Dependabot auto merge'
 runs:
-  main: index.js
+  main: dist/index.js
   using: node12
