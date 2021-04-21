@@ -14,10 +14,10 @@ class ActionContext {
 }
 
 class ActionInput {
-    githubUser: string = '';
-    githubToken: string = '';
+    gitHubUser: string = '';
+    gitHubToken: string = '';
     label: string = '';
-    semverMatch: string = '';
+    semVerMatch: string = '';
 }
 
 class InternalContext {
