@@ -1,0 +1,16 @@
+name: Dependabot auto merge
+
+on:
+  check_suite:
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  dependabot-auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: '@economic/platform'

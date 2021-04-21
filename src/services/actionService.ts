@@ -1,24 +1,22 @@
-import { context, getOctokit } from '@actions/github'
+import { context } from '@actions/github'
 import { getInput, warning } from '@actions/core'
-import { ActionContextRepo, InternalContext } from '../models/actionContextModels'
+import { ActionContextRepo, InternalContext, SemVer } from '../models/actionContextModels'
+import { determineSemVer } from './semVerService'
 
 function createInternalContext () : InternalContext {
-  const gitHubToken = getInput('github_token', { required: true })
-
   return {
     actionContext: {
       actor: context.actor,
       eventName: context.eventName,
-      checkSuiteConclusion: context.payload?.check_suite?.conclusion ?? '',
-      prIds: context.payload?.check_suite?.pull_requests.map((pr: { number: number }) => pr.number) ?? [],
+      checkSuiteConclusion: context.payload.check_suite?.conclusion ?? '',
+      prIds: context.payload.check_suite?.pull_requests.map((pr: { number: number }) => pr.number) ?? [],
       repo: context.repo as ActionContextRepo
     },
-    gitHubClient: getOctokit(gitHubToken),
     input: {
-      gitHubToken: gitHubToken,
+      gitHubToken: getInput('github_token', { required: true }),
       gitHubUser: getInput('github_user'),
-      label: getInput('label'),
-      semVerMatch: getInput('semver_match')
+      reviewers: getInput('reviewers')?.split(',') ?? [],
+      semVerLimit: determineSemVer(getInput('semver_limit'), SemVer.Patch)
     }
   }
 }
