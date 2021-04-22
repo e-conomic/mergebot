@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { InternalContext } from '../src/models/actionContextModels'
+import { InternalContext, SemVer } from '../src/models/actionContextModels'
 import { shouldProcess } from '../src/services/actionService'
 
 describe('shouldProcess', () => {
@@ -16,10 +16,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      gitHubToken: 'githubToken',
+      gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
-      label: 'automerge',
-      semVerMatch: 'minor'
+      reviewers: ['reviewer'],
+      semVerLimit: SemVer.Minor
     }
 
     const result = shouldProcess(internalContext)
@@ -40,10 +40,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      gitHubToken: 'githubToken',
+      gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
-      label: 'automerge',
-      semVerMatch: 'minor'
+      reviewers: ['reviewer'],
+      semVerLimit: SemVer.Minor
     }
 
     const result = shouldProcess(internalContext)
@@ -64,10 +64,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      gitHubToken: 'githubToken',
+      gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
-      label: 'automerge',
-      semVerMatch: 'minor'
+      reviewers: ['reviewer'],
+      semVerLimit: SemVer.Minor
     }
 
     const result = shouldProcess(internalContext)
@@ -88,10 +88,10 @@ describe('shouldProcess', () => {
       }
     }
     internalContext.input = {
-      gitHubToken: 'githubToken',
+      gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
-      label: 'automerge',
-      semVerMatch: 'minor'
+      reviewers: ['reviewer'],
+      semVerLimit: SemVer.Minor
     }
 
     const result = shouldProcess(internalContext)

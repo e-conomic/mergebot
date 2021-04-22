@@ -1,4 +1,3 @@
-import { GitHub } from '@actions/github/lib/utils'
 
 class ActionContextRepo {
     owner: string ='';
@@ -13,16 +12,28 @@ class ActionContext {
     repo: ActionContextRepo = new ActionContextRepo()
 }
 
+// eslint has some trouble understanding usages of enums
+// eslint-disable-next-line no-unused-vars
+enum SemVer {
+    // eslint-disable-next-line no-unused-vars
+    Patch = 1,
+    // eslint-disable-next-line no-unused-vars
+    Minor = 2,
+    // eslint-disable-next-line no-unused-vars
+    Major = 3,
+    // eslint-disable-next-line no-unused-vars
+    Other = 4
+}
+
 class ActionInput {
-    gitHubUser: string = '';
     gitHubToken: string = '';
-    label: string = '';
-    semVerMatch: string = '';
+    gitHubUser: string = '';
+    reviewers: string[] = [];
+    semVerLimit: SemVer = SemVer.Patch;
 }
 
 class InternalContext {
     actionContext: ActionContext = new ActionContext();
-    gitHubClient!: InstanceType<typeof GitHub>;
     input: ActionInput = new ActionInput();
 }
 
@@ -30,5 +41,6 @@ export {
   InternalContext,
   ActionInput,
   ActionContext,
-  ActionContextRepo
+  ActionContextRepo,
+  SemVer
 }
