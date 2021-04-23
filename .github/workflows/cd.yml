@@ -1,15 +1,16 @@
-name: Continuous Integration
+name: Continuous Delivery
 
-on: 
-  pull_request:
+on:
+  push:
     branches:
       - main
 
 jobs:
-  test:
+  release:
+    if: '!contains(github.event.head_commit.message, 'skip ci')'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           persist-credentials: false
@@ -19,12 +20,11 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: npm ci --no-audit --no-progress --prefer-offline
-      - name: Run checks
-        run: npm run workflow:test
-      - name: Package action
+      - name: Build
         run: npm run workflow:package
-      - name: Run action
-        uses: ./
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update
+        run: |
+          git add .
+          git commit -m "Updated action [skip ci]"
+          git push
     timeout-minutes: 5
