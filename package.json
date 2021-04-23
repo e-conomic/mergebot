@@ -19,7 +19,7 @@
     "workflow:test": "npm run build:check && npm run lint && npm run test:ci",
     "workflow:package": "npm run build && npm run package",
     "prepare": "husky install",
-    "husky:pre-commit": "npm run test && lint-staged"
+    "husky:pre-commit": "npm run test && lint-staged && npm run build && npm run package && git add ."
   },
   "lint-staged": {
     "*.ts": [
