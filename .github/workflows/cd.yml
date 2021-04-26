@@ -22,6 +22,8 @@ jobs:
         run: npm run workflow:package
       - name: Update
         run: |
+          git config user.email '{{ secrets.action_user_email }}'
+          git config user.name '{{ secrets.action_user_name }}'
           git add .
           git commit -m "Updated action [skip ci]"
           git push
