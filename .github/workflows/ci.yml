@@ -30,6 +30,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit changes
         run: |
+          git config user.email '{{ secrets.ACTION_USER_EMAIL }}'
+          git config user.name '{{ secrets.ACTION_USER_NAME }}'
           git add .
           git commit -m "Update action [skip ci]"
           git push
