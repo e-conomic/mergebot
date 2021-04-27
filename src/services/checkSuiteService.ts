@@ -32,7 +32,7 @@ class CheckSuiteService {
   private async getPullRequests (internalContext: InternalContext): Promise<PullRequestModel[]> {
     const pullRequestPromises: Promise<PullRequestModel | undefined>[] = []
 
-    internalContext.actionContext.prIds.forEach(prId => {
+    internalContext.actionContext.prNumbers.forEach(prId => {
       const request: GetPullRequestModel = {
         prNumber: prId,
         repoName: internalContext.actionContext.repo.repo,
@@ -75,7 +75,7 @@ class CheckSuiteService {
     internalContext: InternalContext
   ) : Promise<void> {
     const approveRequest: ApprovePullRequestModel = {
-      prNumber: pullRequest.id,
+      prNumber: pullRequest.number,
       repoName: internalContext.actionContext.repo.repo,
       repoOwner: internalContext.actionContext.repo.owner
     }
@@ -84,11 +84,18 @@ class CheckSuiteService {
 
     if (isApproved) {
       const mergeRequest: MergePullRequestModel = {
-        prNumber: pullRequest.id,
+        prNumber: pullRequest.number,
         repoName: internalContext.actionContext.repo.repo,
         repoOwner: internalContext.actionContext.repo.owner
       }
-      await this.gitHubService.mergePullRequest(mergeRequest)
+
+      const isMerged = await this.gitHubService.mergePullRequest(mergeRequest)
+
+      if (!isMerged) {
+        await this.addPrReviewersIfConfigured(pullRequest, internalContext)
+      }
+    } else {
+      await this.addPrReviewersIfConfigured(pullRequest, internalContext)
     }
   }
 
@@ -101,7 +108,7 @@ class CheckSuiteService {
     }
 
     const request: AddPrReviewersModel = {
-      prNumber: pullRequest.id,
+      prNumber: pullRequest.number,
       repoName: internalContext.actionContext.repo.repo,
       repoOwner: internalContext.actionContext.repo.owner,
       reviewers: internalContext.input.reviewers

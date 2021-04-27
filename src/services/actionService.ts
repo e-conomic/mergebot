@@ -9,7 +9,7 @@ function createInternalContext () : InternalContext {
       actor: context.actor,
       eventName: context.eventName,
       checkSuiteConclusion: context.payload.check_suite?.conclusion ?? '',
-      prIds: context.payload.check_suite?.pull_requests.map((pr: { number: number }) => pr.number) ?? [],
+      prNumbers: context.payload.check_suite?.pull_requests.map((pr: { number: number }) => pr.number) ?? [],
       repo: context.repo as ActionContextRepo
     },
     input: {

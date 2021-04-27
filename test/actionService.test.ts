@@ -9,7 +9,7 @@ describe('shouldProcess', () => {
       actor: 'dependabot[bot]',
       eventName: 'check_suite',
       checkSuiteConclusion: 'success',
-      prIds: [1],
+      prNumbers: [1],
       repo: {
         repo: 'repo',
         owner: 'owner'
@@ -33,7 +33,7 @@ describe('shouldProcess', () => {
       actor: 'other[bot]',
       eventName: 'check_suite',
       checkSuiteConclusion: 'success',
-      prIds: [1],
+      prNumbers: [1],
       repo: {
         repo: 'repo',
         owner: 'owner'
@@ -57,7 +57,7 @@ describe('shouldProcess', () => {
       actor: 'other[bot]',
       eventName: 'check_suite',
       checkSuiteConclusion: 'neutral',
-      prIds: [1],
+      prNumbers: [1],
       repo: {
         repo: 'repo',
         owner: 'owner'
@@ -81,7 +81,7 @@ describe('shouldProcess', () => {
       actor: 'other[bot]',
       eventName: 'workflow_run',
       checkSuiteConclusion: 'neutral',
-      prIds: [1],
+      prNumbers: [1],
       repo: {
         repo: 'repo',
         owner: 'owner'

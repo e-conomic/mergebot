@@ -18,7 +18,7 @@ class AddPrReviewersModel extends GitHubRequestModel {
 }
 
 class PullRequestModel {
-  id: number = 0;
+  number: number = 0;
   title: string = '';
   mergeable: boolean | null = null;
 }
