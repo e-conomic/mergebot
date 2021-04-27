@@ -16,6 +16,7 @@ function createInternalContext () : InternalContext {
       gitHubToken: getInput('github_token', { required: true }),
       gitHubUser: getInput('github_user'),
       reviewers: getInput('reviewers')?.split(',') ?? [],
+      teamReviewers: getInput('team_reviewers')?.split(',') ?? [],
       semVerLimit: determineSemVer(getInput('semver_limit'), SemVer.Patch)
     }
   }

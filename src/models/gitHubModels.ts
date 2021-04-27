@@ -15,6 +15,7 @@ class MergePullRequestModel extends GitHubRequestModel {
 
 class AddPrReviewersModel extends GitHubRequestModel {
   reviewers: string[] = []
+  teamReviewers: string[] = []
 }
 
 class PullRequestModel {

@@ -111,7 +111,8 @@ class CheckSuiteService {
       prNumber: pullRequest.number,
       repoName: internalContext.actionContext.repo.repo,
       repoOwner: internalContext.actionContext.repo.owner,
-      reviewers: internalContext.input.reviewers
+      reviewers: internalContext.input.reviewers,
+      teamReviewers: internalContext.input.teamReviewers
     }
     await this.gitHubService.addReviewersToPr(request)
   }
