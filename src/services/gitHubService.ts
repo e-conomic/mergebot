@@ -73,7 +73,8 @@ class GitHubService {
         owner: request.repoOwner,
         pull_number: request.prNumber,
         repo: request.repoName,
-        reviewers: request.reviewers
+        reviewers: request.reviewers,
+        team_reviewers: request.teamReviewers
       })
       return true
     } catch (err) {

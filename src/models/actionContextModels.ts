@@ -28,6 +28,7 @@ class ActionInput {
     gitHubToken: string = '';
     gitHubUser: string = '';
     reviewers: string[] = [];
+    teamReviewers: string[] = [];
     semVerLimit: SemVer = SemVer.Patch;
 }
 

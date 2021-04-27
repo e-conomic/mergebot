@@ -19,6 +19,7 @@ describe('shouldProcess', () => {
       gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
+      teamReviewers: ['reviewer'],
       semVerLimit: SemVer.Minor
     }
 
@@ -43,6 +44,7 @@ describe('shouldProcess', () => {
       gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
+      teamReviewers: ['reviewer'],
       semVerLimit: SemVer.Minor
     }
 
@@ -67,6 +69,7 @@ describe('shouldProcess', () => {
       gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
+      teamReviewers: ['reviewer'],
       semVerLimit: SemVer.Minor
     }
 
@@ -91,6 +94,7 @@ describe('shouldProcess', () => {
       gitHubToken: 'token',
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
+      teamReviewers: ['reviewer'],
       semVerLimit: SemVer.Minor
     }
 

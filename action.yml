@@ -12,7 +12,10 @@ inputs:
     required: false
     default: patch
   reviewers:
-    description: Reviewers to add to PR in case auto merge is not possible
+    description: Reviewers to add to PR in case auto merge is not possible. Comma separated list
+    required: false
+  team_reviewers:
+    description: Team reviewers to add to PR in case auto merge is not possible. Comma separated list
     required: false
 name: Dependabot auto merge
 runs:
