@@ -24,7 +24,7 @@ class GitHubService {
       })
 
       return {
-        id: data.id,
+        number: data.number,
         title: data.title,
         mergeable: data.mergeable
       }

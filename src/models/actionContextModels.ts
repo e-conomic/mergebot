@@ -7,7 +7,7 @@ class ActionContext {
     actor: string ='';
     eventName: string = '';
     checkSuiteConclusion: string = ''
-    prIds: number[] = []
+    prNumbers: number[] = []
     repo: ActionContextRepo = new ActionContextRepo()
 }
 
