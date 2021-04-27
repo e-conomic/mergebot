@@ -4,22 +4,21 @@
   "description": "GitHub Action that automates merging Dependabot PRs",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "build:check": "tsc --noEmit",
-    "build:watch": "npm run build -- --watch",
-    "clean:dist": "rimraf dist",
+    "build": "npm run clean -- lib && tsc",
+    "build:check": "npm run build -- --noEmit",
+    "build:watch": "tsc --watch",
+    "clean": "rimraf",
     "lint": "eslint **/*.ts",
     "lint:fix": "npm run lint -- --fix",
-    "package": "npm run clean:dist && npm run package:dist",
-    "package:dist": "ncc build --out dist --minify --source-map --v8-cache",
+    "package": "npm run build && npm run package:single",
+    "package:single": "npm run clean -- dist && ncc build --out dist --minify --source-map --v8-cache",
     "test": "jest",
     "test:ci": "npm run test -- --ci",
     "test:coverage": "npm run test -- --collect-coverage",
     "test:watch": "npm run test:coverage -- --watch --verbose false",
     "workflow:test": "npm run build:check && npm run lint && npm run test:ci",
-    "workflow:package": "npm run build && npm run package",
     "prepare": "husky install",
-    "husky:pre-commit": "npm run build:check && npm run test && lint-staged && npm run workflow:package && git add ."
+    "husky:pre-commit": "npm run build:check && npm run test && lint-staged && npm run package && git add ."
   },
   "lint-staged": {
     "*.ts": [
