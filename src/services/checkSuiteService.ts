@@ -103,7 +103,10 @@ class CheckSuiteService {
     pullRequest: PullRequestModel,
     internalContext: InternalContext
   ): Promise<void> {
-    if (internalContext.input.reviewers.length === 0) {
+    const reviewersAreConfigured = internalContext.input.reviewers.length > 0 ||
+    internalContext.input.teamReviewers.length > 0
+
+    if (!reviewersAreConfigured) {
       return
     }
 
@@ -114,7 +117,7 @@ class CheckSuiteService {
       reviewers: internalContext.input.reviewers,
       teamReviewers: internalContext.input.teamReviewers
     }
-    await this.gitHubService.addReviewersToPr(request)
+    await this.gitHubService.addPrReviewers(request)
   }
 }
 

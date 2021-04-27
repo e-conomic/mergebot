@@ -1,7 +1,7 @@
 class GitHubRequestModel {
-    prNumber: number = 0;
-    repoOwner: string = '';
-    repoName: string = '';
+    prNumber: number = 0
+    repoOwner: string = ''
+    repoName: string = ''
 }
 
 class GetPullRequestModel extends GitHubRequestModel {

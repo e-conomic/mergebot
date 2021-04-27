@@ -67,21 +67,27 @@ class GitHubService {
     }
   }
 
-  public async addReviewersToPr (request: AddPrReviewersModel) : Promise<boolean> {
+  public async addPrReviewers (request: AddPrReviewersModel) : Promise<void> {
     try {
       await this.client.pulls.requestReviewers({
         owner: request.repoOwner,
         pull_number: request.prNumber,
         repo: request.repoName,
-        reviewers: request.reviewers,
-        team_reviewers: request.teamReviewers
+        reviewers: this.determineReviewers(request.reviewers),
+        team_reviewers: this.determineReviewers(request.teamReviewers)
       })
-      return true
     } catch (err) {
       error(`Cannot add reviewers to pull request ${request.prNumber}`)
       error(err)
     }
-    return false
+  }
+
+  private determineReviewers (input: string[]) : string[] | undefined {
+    if (input.length === 0) {
+      return undefined
+    }
+
+    return input
   }
 }
 
