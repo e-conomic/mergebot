@@ -3,6 +3,14 @@ import { getInput, warning } from '@actions/core'
 import { ActionContextRepo, InternalContext, SemVer } from '../models/actionContextModels'
 import { determineSemVer } from './semVerService'
 
+function splitStringIfNotEmpty (input: string) : string[] {
+  if (!input) {
+    return []
+  }
+
+  return input.split(',')
+}
+
 function createInternalContext () : InternalContext {
   return {
     actionContext: {
@@ -15,8 +23,8 @@ function createInternalContext () : InternalContext {
     input: {
       gitHubToken: getInput('github_token', { required: true }),
       gitHubUser: getInput('github_user'),
-      reviewers: getInput('reviewers')?.split(',') ?? [],
-      teamReviewers: getInput('team_reviewers')?.split(',') ?? [],
+      reviewers: splitStringIfNotEmpty(getInput('reviewers')),
+      teamReviewers: splitStringIfNotEmpty(getInput('team_reviewers')),
       semVerLimit: determineSemVer(getInput('semver_limit'), SemVer.Patch)
     }
   }
