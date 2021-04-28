@@ -41,11 +41,6 @@ function shouldProcess (internalContext : InternalContext) : boolean {
     return false
   }
 
-  if (internalContext.actionContext.checkSuiteConclusion !== 'success') {
-    warning('Check suite did not complete successfully, no processing will be done')
-    return false
-  }
-
   return true
 }
 
