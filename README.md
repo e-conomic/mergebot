@@ -38,7 +38,7 @@ Below is a sample workflow that uses Mergebot. Mergebot only supports the check_
       dependabot-auto-merge:
         runs-on: ubuntu-latest
         steps:
-          - uses: e-conomic/mergebot@v0.0.3
+          - uses: e-conomic/mergebot@v1
             with:
               github_token: ${{ secrets.GITHUB_TOKEN }}
               reviewers: 'reviewer1,reviewer2,reviewer3'
