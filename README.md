@@ -25,9 +25,7 @@ Below is a sample dependabot.yml. Notice the schedule is set to daily. This make
 
 # Mergebot config
 
-Below is a sample workflow that uses Mergebot. Notice we recommend checking whether the check_suite was triggered by Dependabot and it finished successfully. This is not necessary, as the action will check this also, but it saves a few seconds from the runtime
-
-Mergebot only supports the check_suite trigger, ensuring it only runs after all the other checks
+Below is a sample workflow that uses Mergebot. Mergebot only supports the check_suite trigger, ensuring it only runs after all the other checks
 
     name: Dependabot auto merge
 
@@ -38,14 +36,12 @@ Mergebot only supports the check_suite trigger, ensuring it only runs after all 
 
     jobs:
       dependabot-auto-merge:
-        if: github.actor == 'dependabot[bot]' && github.event.check_suite.conclusion == 'success'
         runs-on: ubuntu-latest
         steps:
           - uses: e-conomic/mergebot@v0.0.3
             with:
               github_token: ${{ secrets.GITHUB_TOKEN }}
               reviewers: 'reviewer1,reviewer2,reviewer3'
-              team_reviewers: 'team1,team2'
 
 # Mergebot inputs
 
