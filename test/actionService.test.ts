@@ -59,34 +59,6 @@ describe('shouldProcess', () => {
     expect(result).toBeFalsy()
   })
 
-  test('returns false when check suite did not complete successfully', async () => {
-    // arrange
-    const internalContext = new InternalContext()
-    internalContext.actionContext = {
-      actor: 'dependabot[bot]',
-      eventName: 'check_suite',
-      checkSuiteConclusion: 'neutral',
-      prNumbers: [1],
-      repo: {
-        repo: 'repo',
-        owner: 'owner'
-      }
-    }
-    internalContext.input = {
-      gitHubToken: 'token',
-      gitHubUser: 'dependabot[bot]',
-      reviewers: ['reviewer'],
-      teamReviewers: ['reviewer'],
-      semVerLimit: SemVer.Minor
-    }
-
-    // act
-    const result = shouldProcess(internalContext)
-
-    // assert
-    expect(result).toBeFalsy()
-  })
-
   test('returns false when event is different from check_suite', async () => {
     // arrange
     const internalContext = new InternalContext()

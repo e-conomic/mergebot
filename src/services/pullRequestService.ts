@@ -7,6 +7,11 @@ import { warning } from '@actions/core'
 
 class PullRequestService {
   public shouldMergePr (pullRequest: PullRequestModel, internalContext: InternalContext): boolean {
+    if (internalContext.actionContext.checkSuiteConclusion !== 'success') {
+      warning('Check suite did not complete successfully')
+      return false
+    }
+
     if (!pullRequest.mergeable) {
       warning('Pull request is not mergeable')
       return false
