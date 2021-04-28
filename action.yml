@@ -6,7 +6,8 @@ inputs:
     default: dependabot[bot]
   github_token:
     description: Token for action
-    required: true
+    required: false
+    default: ${{ secrets.GITHUB_TOKEN }}
   semver_match:
     description: major, minor or patch
     required: false
