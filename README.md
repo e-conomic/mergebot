@@ -54,6 +54,8 @@ Below is a sample workflow that uses Mergebot. Mergebot only supports the check_
 | team_reviewers | no | | | Comma separated list of GitHub team slugs. Requires PAT | 
 
 <br/>
+Mergebot uses patch as the default semver_match option as it is safest. However, if you want to enable a higher bump, you can use minor (which also includes patch) or major (which also includes minor and patch)
+
 Mergebot can use the standard token available to GitHub actions to add reviewers, but, unfortunately, GitHub prevents it from doing the same for teams as the token lacks the necessary permissions. As such, you will need to generate a PAT which includes these permissions and use it instead
 Another alternative is to create a secret that includes a list of users, and use it as the value of the <b>reviewers</b> input
 
