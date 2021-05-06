@@ -1,7 +1,7 @@
-import { context } from '@actions/github'
 import { getInput, warning } from '@actions/core'
 import { ActionContextRepo, InternalContext, SemVer } from '../models/actionContextModels'
 import { determineSemVer } from './semVerService'
+import { Context } from '@actions/github/lib/context'
 
 function splitStringIfNotEmpty (input: string) : string[] {
   if (!input) {
@@ -11,7 +11,7 @@ function splitStringIfNotEmpty (input: string) : string[] {
   return input.split(',')
 }
 
-function createInternalContext () : InternalContext {
+function createInternalContext (context: Context) : InternalContext {
   return {
     actionContext: {
       actor: context.actor,

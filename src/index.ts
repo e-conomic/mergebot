@@ -1,5 +1,5 @@
 import { setFailed, error } from '@actions/core'
-import { getOctokit } from '@actions/github'
+import { context, getOctokit } from '@actions/github'
 import { InternalContext } from './models/actionContextModels'
 import { createInternalContext, shouldProcess } from './services/actionService'
 import { CheckSuiteService } from './services/checkSuiteService'
@@ -15,7 +15,7 @@ function createCheckSuiteEventService (internalContext: InternalContext) {
 }
 
 async function start (): Promise<void> {
-  const ctx = createInternalContext()
+  const ctx = createInternalContext(context)
 
   if (!shouldProcess(ctx)) {
     return

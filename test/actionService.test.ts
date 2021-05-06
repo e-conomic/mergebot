@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, jest, test } from '@jest/globals'
+import { Context } from '@actions/github/lib/context'
+import { describe, expect, test } from '@jest/globals'
 import { InternalContext, SemVer } from '../src/models/actionContextModels'
-import { shouldProcess } from '../src/services/actionService'
+import { createInternalContext, shouldProcess } from '../src/services/actionService'
 
 describe('shouldProcess', () => {
   test('returns true when all conditions are met', async () => {
@@ -89,41 +90,45 @@ describe('shouldProcess', () => {
 })
 
 describe('createInternalContext', () => {
-  beforeEach(() => { jest.resetModules() })
-
   test('returns InternalContext instance for check suite trigger', () => {
     // arrange
     process.env.INPUT_GITHUB_TOKEN = 'github_token'
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
     process.env.INPUT_REVIEWERS = 'individual_reviewer'
 
-    jest.mock('@actions/github', () => {
-      return {
-        context: {
-          actor: 'dependabot[bot]',
-          eventName: 'check_suite',
-          payload: {
-            check_suite: {
-              conclusion: 'success',
-              pull_requests: [
-                {
-                  number: 1
-                }
-              ]
+    const context: Context = {
+      actor: 'dependabot[bot]',
+      eventName: 'check_suite',
+      payload: {
+        check_suite: {
+          conclusion: 'success',
+          pull_requests: [
+            {
+              number: 1
             }
-          },
-          repo: {
-            owner: 'repo_owner',
-            repo: 'repo_name'
-          }
+          ]
         }
+      },
+      repo: {
+        owner: 'repo_owner',
+        repo: 'repo_name'
+      },
+      sha: '',
+      ref: '',
+      workflow: '',
+      action: '',
+      job: '',
+      runNumber: 1,
+      runId: 1,
+      issue: {
+        owner: '',
+        repo: '',
+        number: 1
       }
-    })
-
-    const { createInternalContext } = require('../src/services/actionService')
+    }
 
     // act
-    const result = createInternalContext()
+    const result = createInternalContext(context)
 
     // assert
     expect(result).toBeDefined()
@@ -154,25 +159,31 @@ describe('createInternalContext', () => {
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
     process.env.INPUT_REVIEWERS = 'individual_reviewer'
 
-    jest.mock('@actions/github', () => {
-      return {
-        context: {
-          actor: 'dependabot[bot]',
-          eventName: 'workflow_run',
-          payload: {
-          },
-          repo: {
-            owner: 'repo_owner',
-            repo: 'repo_name'
-          }
-        }
+    const context: Context = {
+      actor: 'dependabot[bot]',
+      eventName: 'workflow_run',
+      payload: {
+      },
+      repo: {
+        owner: 'repo_owner',
+        repo: 'repo_name'
+      },
+      sha: '',
+      ref: '',
+      workflow: '',
+      action: '',
+      job: '',
+      runNumber: 1,
+      runId: 1,
+      issue: {
+        owner: '',
+        repo: '',
+        number: 1
       }
-    })
-
-    const { createInternalContext } = require('../src/services/actionService')
+    }
 
     // act
-    const result = createInternalContext()
+    const result = createInternalContext(context)
 
     // assert
     expect(result).toBeDefined()
