@@ -17,30 +17,46 @@ class PullRequestService {
       return false
     }
 
-    if (this.isActualSemVerHigher(pullRequest, internalContext)) {
-      warning('Version upgrade is higher than configured. Will not merge PR')
+    if (!this.isUpgradeAllowed(pullRequest, internalContext)) {
+      warning('Upgrade is not allowed. Will not merge PR')
       return false
     }
 
     return true
   }
 
-  private isActualSemVerHigher (pullRequest: PullRequestModel, internalContext: InternalContext) {
-    const semVer = this.determineSemVerUpgrade(pullRequest)
+  private isUpgradeAllowed (pullRequest: PullRequestModel, internalContext: InternalContext) {
+    const proposedUpgradeSection = this.getProposedUpgradeFromPrTitle(pullRequest)
 
-    if (!semVer) {
-      return true
+    if (!proposedUpgradeSection) {
+      warning('PR title does not contain enough information about the affected versions')
+      return false
     }
 
-    return semVer > internalContext.input.semVerLimit
+    const proposedSemVerUpgrade = this.determineSemVerUpgrade(proposedUpgradeSection)
+
+    if (!proposedSemVerUpgrade) {
+      warning('Cannot determine the version upgrade bump')
+      return false
+    }
+
+    return internalContext.input.semVerLimit >= proposedSemVerUpgrade
   }
 
-  private determineSemVerUpgrade (pullRequest: PullRequestModel) : SemVer | undefined {
-    const versions = findVersions(pullRequest.title)
+  private getProposedUpgradeFromPrTitle (pullRequest: PullRequestModel) : string | undefined {
+    const regex = /\sfrom\s(?<proposedUpgrade>.+)/iu
+
+    const result = regex.exec(pullRequest.title)
+
+    return result?.groups?.proposedUpgrade
+  }
+
+  private determineSemVerUpgrade (upgradeSection: string) : SemVer | undefined {
+    const versions = findVersions(upgradeSection)
 
     if (versions.length !== 2) {
       warning(
-        'Identified more than two versions in Dependabot PR title. Will not merge PR')
+        `Expected two versions in Dependabot PR title. Determined it contains ${versions.length}`)
       return undefined
     }
 

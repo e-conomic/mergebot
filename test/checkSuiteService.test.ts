@@ -23,7 +23,7 @@ describe('handleEvent', () => {
               const pullRequest: PullRequestModel = {
                 mergeable: true,
                 number: 1,
-                title: 'Upgrade from v1.0.1 to v1.0.2'
+                title: 'Bump package from v1.0.1 to v1.0.2'
               }
               return Promise.resolve(pullRequest)
             },
@@ -75,7 +75,7 @@ describe('handleEvent', () => {
               const pullRequest: PullRequestModel = {
                 mergeable: false,
                 number: 1,
-                title: 'Upgrade from v1.0.1 to v1.0.2'
+                title: 'Bump package from v1.0.1 to v1.0.2'
               }
               return Promise.resolve(pullRequest)
             },
@@ -126,7 +126,7 @@ describe('handleEvent', () => {
               const pullRequest: PullRequestModel = {
                 mergeable: true,
                 number: 1,
-                title: 'Upgrade from v1.0.1 to v1.0.2'
+                title: 'Bump package from v1.0.1 to v1.0.2'
               }
               return Promise.resolve(pullRequest)
             },
@@ -178,7 +178,7 @@ describe('handleEvent', () => {
               const pullRequest: PullRequestModel = {
                 mergeable: true,
                 number: 1,
-                title: 'Upgrade from v1.0.1 to v1.0.2'
+                title: 'Bump package from v1.0.1 to v1.0.2'
               }
               return Promise.resolve(pullRequest)
             },
@@ -231,7 +231,7 @@ describe('handleEvent', () => {
               const pullRequest: PullRequestModel = {
                 mergeable: true,
                 number: 1,
-                title: 'Upgrade from v1.0.1 to v1.0.2'
+                title: 'Bump package from v1.0.1 to v1.0.2'
               }
               return Promise.resolve(pullRequest)
             },
