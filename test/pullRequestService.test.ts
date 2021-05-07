@@ -10,7 +10,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update from v1.0.0 to v1.0.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.0.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -27,7 +27,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update from v1.0.0 to v1.0.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.0.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -44,7 +44,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update from v1.0.0 to v1.1.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.1.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -61,7 +61,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = false
-    pullRequest.title = 'Update from v1.0.0 to v1.0.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.0.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -78,7 +78,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update from v1.0.0 to v1.1.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.1.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -95,7 +95,24 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update to v1.1.1'
+    pullRequest.title = 'Bump package from v1-beta to v1'
+
+    const internalContext = new InternalContext()
+    internalContext.actionContext.checkSuiteConclusion = 'success'
+    internalContext.input.semVerLimit = SemVer.Patch
+
+    // act
+    const result = pullRequestService.shouldMergePr(pullRequest, internalContext)
+
+    // assert
+    expect(result).toBeFalsy()
+  })
+
+  test('returns false when title does not match expected format', () => {
+    // arrange
+    const pullRequest = new PullRequestModel()
+    pullRequest.mergeable = true
+    pullRequest.title = 'Bump package to v1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'success'
@@ -112,7 +129,7 @@ describe('shouldMerge', () => {
     // arrange
     const pullRequest = new PullRequestModel()
     pullRequest.mergeable = true
-    pullRequest.title = 'Update from v1.0.0 to v1.0.1'
+    pullRequest.title = 'Bump package from v1.0.0 to v1.0.1'
 
     const internalContext = new InternalContext()
     internalContext.actionContext.checkSuiteConclusion = 'other'
