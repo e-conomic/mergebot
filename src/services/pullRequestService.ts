@@ -3,7 +3,7 @@ import { PullRequestModel } from '../models/gitHubModels'
 import findVersions from 'find-versions'
 import semverDiff from 'semver-diff'
 import { determineSemVer } from './semVerService'
-import { warning } from '@actions/core'
+import { info, warning } from '@actions/core'
 
 class PullRequestService {
   public shouldMergePr (pullRequest: PullRequestModel, internalContext: InternalContext): boolean {
@@ -52,7 +52,17 @@ class PullRequestService {
   }
 
   private determineSemVerUpgrade (upgradeSection: string) : SemVer | undefined {
-    const versions = findVersions(upgradeSection)
+    const versions = findVersions(upgradeSection, { loose: true })
+
+    if (versions.length === 1) {
+      // Dependabot PR title contains two versions, current and new, in sem-ver format
+      // However, the analyzers don't play well with packages that use the MAJOR.MINOR.PATCH.BUILD format
+      // BUILD information is excluded by findVersions, returning a single version when BUILD is the only difference
+      // In this case, it is basically a patch upgrade, so we can forgo further analysis
+      // Also worth noting that semverDiff crashes with BUILD info in the string
+      info('Identified a single version that follows sem-ver rules. Defaulting to patch upgrade')
+      return SemVer.Patch
+    }
 
     if (versions.length !== 2) {
       warning(
