@@ -23,6 +23,23 @@ describe('shouldMerge', () => {
     expect(result).toBeTruthy()
   })
 
+  test('returns true when PR should be merged with MAJOR.MINOR.PATCH.BUILD format', () => {
+    // arrange
+    const pullRequest = new PullRequestModel()
+    pullRequest.mergeable = true
+    pullRequest.title = 'Bump package from v1.0.0.1 to v1.0.0.2'
+
+    const internalContext = new InternalContext()
+    internalContext.actionContext.checkSuiteConclusion = 'success'
+    internalContext.input.semVerLimit = SemVer.Patch
+
+    // act
+    const result = pullRequestService.shouldMergePr(pullRequest, internalContext)
+
+    // assert
+    expect(result).toBeTruthy()
+  })
+
   test('returns true when PR should be merged with minor limit', () => {
     // arrange
     const pullRequest = new PullRequestModel()
