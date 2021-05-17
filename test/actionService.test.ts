@@ -124,7 +124,10 @@ describe('createInternalContext', () => {
         owner: '',
         repo: '',
         number: 1
-      }
+      },
+      apiUrl: '',
+      serverUrl: '',
+      graphqlUrl: ''
     }
 
     // act
@@ -179,7 +182,10 @@ describe('createInternalContext', () => {
         owner: '',
         repo: '',
         number: 1
-      }
+      },
+      apiUrl: '',
+      serverUrl: '',
+      graphqlUrl: ''
     }
 
     // act
