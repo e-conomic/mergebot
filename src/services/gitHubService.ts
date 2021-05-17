@@ -17,7 +17,7 @@ class GitHubService {
 
   public async getPullRequest (request: GetPullRequestModel): Promise<PullRequestModel | undefined> {
     try {
-      const { data } = await this.client.pulls.get({
+      const { data } = await this.client.rest.pulls.get({
         owner: request.repoOwner,
         repo: request.repoName,
         pull_number: request.prNumber
@@ -37,7 +37,7 @@ class GitHubService {
 
   public async approvePullRequest (request: ApprovePullRequestModel): Promise<boolean> {
     try {
-      await this.client.pulls.createReview({
+      await this.client.rest.pulls.createReview({
         owner: request.repoOwner,
         repo: request.repoName,
         pull_number: request.prNumber,
@@ -53,7 +53,7 @@ class GitHubService {
 
   public async mergePullRequest (request: MergePullRequestModel): Promise<boolean> {
     try {
-      await this.client.pulls.merge({
+      await this.client.rest.pulls.merge({
         owner: request.repoOwner,
         pull_number: request.prNumber,
         repo: request.repoName,
@@ -69,7 +69,7 @@ class GitHubService {
 
   public async addPrReviewers (request: AddPrReviewersModel) : Promise<void> {
     try {
-      await this.client.pulls.requestReviewers({
+      await this.client.rest.pulls.requestReviewers({
         owner: request.repoOwner,
         pull_number: request.prNumber,
         repo: request.repoName,
