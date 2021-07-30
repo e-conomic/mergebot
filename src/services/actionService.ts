@@ -25,7 +25,7 @@ function createInternalContext (context: Context) : InternalContext {
       gitHubUser: getInput('github_user'),
       reviewers: splitStringIfNotEmpty(getInput('reviewers')),
       teamReviewers: splitStringIfNotEmpty(getInput('team_reviewers')),
-      semVerLimit: determineSemVer(getInput('semver_limit'), SemVer.Patch)
+      semVerMatch: determineSemVer(getInput('semver_match'), SemVer.Patch)
     }
   }
 }

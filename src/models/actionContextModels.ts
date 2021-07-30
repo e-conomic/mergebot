@@ -29,7 +29,7 @@ class ActionInput {
     gitHubUser: string = '';
     reviewers: string[] = [];
     teamReviewers: string[] = [];
-    semVerLimit: SemVer = SemVer.Patch;
+    semVerMatch: SemVer = SemVer.Patch;
 }
 
 class InternalContext {

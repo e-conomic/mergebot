@@ -25,7 +25,7 @@ class PullRequestService {
     return true
   }
 
-  private isUpgradeAllowed (pullRequest: PullRequestModel, internalContext: InternalContext) {
+  private isUpgradeAllowed (pullRequest: PullRequestModel, internalContext: InternalContext): boolean {
     const proposedUpgradeSection = this.getProposedUpgradeFromPrTitle(pullRequest)
 
     if (!proposedUpgradeSection) {
@@ -40,7 +40,7 @@ class PullRequestService {
       return false
     }
 
-    return internalContext.input.semVerLimit >= proposedSemVerUpgrade
+    return internalContext.input.semVerMatch >= proposedSemVerUpgrade
   }
 
   private getProposedUpgradeFromPrTitle (pullRequest: PullRequestModel) : string | undefined {
