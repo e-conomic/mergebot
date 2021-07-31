@@ -22,7 +22,7 @@ describe('shouldProcess', () => {
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
       teamReviewers: ['reviewer'],
-      semVerLimit: SemVer.Minor
+      semVerMatch: SemVer.Minor
     }
 
     // act
@@ -50,7 +50,7 @@ describe('shouldProcess', () => {
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
       teamReviewers: ['reviewer'],
-      semVerLimit: SemVer.Minor
+      semVerMatch: SemVer.Minor
     }
 
     // act
@@ -78,7 +78,7 @@ describe('shouldProcess', () => {
       gitHubUser: 'dependabot[bot]',
       reviewers: ['reviewer'],
       teamReviewers: ['reviewer'],
-      semVerLimit: SemVer.Minor
+      semVerMatch: SemVer.Minor
     }
 
     // act
@@ -151,7 +151,7 @@ describe('createInternalContext', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     })
   })
@@ -209,7 +209,7 @@ describe('createInternalContext', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     })
   })

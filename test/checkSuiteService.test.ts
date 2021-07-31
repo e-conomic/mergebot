@@ -50,7 +50,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
@@ -101,7 +101,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
@@ -153,7 +153,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
@@ -206,7 +206,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: ['team_reviewer'],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
@@ -258,7 +258,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
@@ -303,7 +303,7 @@ describe('handleEvent', () => {
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: [],
-        semVerLimit: SemVer.Patch
+        semVerMatch: SemVer.Patch
       }
     }
 
