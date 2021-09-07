@@ -52,7 +52,7 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "@vercel/ncc": "^0.30.0",
     "babel-jest": "^27.0.6",
     "cross-env": "^7.0.3",
