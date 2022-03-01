@@ -17,7 +17,7 @@ jobs:
       - name: Select Node.js version
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - name: Install dependencies
         run: npm ci --no-audit --no-progress --prefer-offline
       - name: Run checks
