@@ -30,7 +30,7 @@ class GitHubService {
       }
     } catch (err) {
       error(`Cannot retrieve pull request ${request.prNumber}`)
-      error(err)
+      error(JSON.stringify(err))
       return undefined
     }
   }
@@ -46,7 +46,7 @@ class GitHubService {
       return true
     } catch (err) {
       error(`Cannot approve pull request ${request.prNumber}`)
-      error(err)
+      error(JSON.stringify(err))
       return false
     }
   }
@@ -62,7 +62,7 @@ class GitHubService {
       return true
     } catch (err) {
       error(`Cannot merge pull request ${request.prNumber}`)
-      error(err)
+      error(JSON.stringify(err))
       return false
     }
   }
@@ -78,7 +78,7 @@ class GitHubService {
       })
     } catch (err) {
       error(`Cannot add reviewers to pull request ${request.prNumber}`)
-      error(err)
+      error(JSON.stringify(err))
     }
   }
 
