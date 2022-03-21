@@ -2,27 +2,26 @@ import { setFailed, error } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
 import { InternalContext } from './models/actionContextModels'
 import { createInternalContext, shouldProcess } from './services/actionService'
-import { CheckSuiteService } from './services/checkSuiteService'
+import { EventService } from './services/eventService'
 import { GitHubService } from './services/gitHubService'
 import { PullRequestService } from './services/pullRequestService'
 
-function createCheckSuiteEventService (internalContext: InternalContext) {
+function createEventService (internalContext: InternalContext) {
   const gitHubClient = getOctokit(internalContext.input.gitHubToken)
   const gitHubService = new GitHubService(gitHubClient)
   const pullRequestService = new PullRequestService()
 
-  return new CheckSuiteService(gitHubService, pullRequestService)
+  return new EventService(gitHubService, pullRequestService)
 }
 
 async function start (): Promise<void> {
-  const ctx = createInternalContext(context)
-
-  if (!shouldProcess(ctx)) {
+  if (!shouldProcess(context)) {
     return
   }
 
-  const checkSuiteEventService = createCheckSuiteEventService(ctx)
-  await checkSuiteEventService.handleEvent(ctx)
+  const ctx = createInternalContext(context)
+  const eventService = createEventService(ctx)
+  await eventService.handleEvent(ctx)
 }
 
 start().catch(err => {

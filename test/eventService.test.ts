@@ -7,7 +7,7 @@ import {
   MergePullRequestModel,
   PullRequestModel
 } from '../src/models/gitHubModels'
-import { CheckSuiteService } from '../src/services/checkSuiteService'
+import { EventService } from '../src/services/eventService'
 import { PullRequestService } from '../src/services/pullRequestService'
 
 describe('handleEvent', () => {
@@ -37,8 +37,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -56,7 +56,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)
@@ -88,8 +88,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -107,7 +107,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)
@@ -140,8 +140,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -159,7 +159,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)
@@ -193,8 +193,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -212,7 +212,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)
@@ -245,8 +245,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -264,7 +264,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)
@@ -290,8 +290,8 @@ describe('handleEvent', () => {
     const internalContext: InternalContext = {
       actionContext: {
         actor: 'dependabot[bot]',
-        eventName: 'check_suite',
         checkSuiteConclusion: 'success',
+        eventName: 'check_suite',
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
@@ -309,7 +309,7 @@ describe('handleEvent', () => {
 
     const { GitHubService } = require('../src/services/gitHubService')
     const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new CheckSuiteService(gitHubServiceInstance, new PullRequestService())
+    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
     await checkSuiteService.handleEvent(internalContext)

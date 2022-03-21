@@ -9,7 +9,7 @@ import {
 import { GitHubService } from './gitHubService'
 import { PullRequestService } from './pullRequestService'
 
-class CheckSuiteService {
+class EventService {
   private readonly gitHubService: GitHubService
   private readonly pullRequestService: PullRequestService
 
@@ -122,5 +122,5 @@ class CheckSuiteService {
 }
 
 export {
-  CheckSuiteService
+  EventService
 }

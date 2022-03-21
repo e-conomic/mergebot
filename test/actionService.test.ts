@@ -1,32 +1,32 @@
 import { Context } from '@actions/github/lib/context'
 import { describe, expect, test } from '@jest/globals'
-import { InternalContext, SemVer } from '../src/models/actionContextModels'
+import { SemVer } from '../src/models/actionContextModels'
 import { createInternalContext, shouldProcess } from '../src/services/actionService'
 
 describe('shouldProcess', () => {
-  test('returns true when all conditions are met', async () => {
+  test('returns true when all conditions are met with check_suite', async () => {
     // arrange
-    const internalContext = new InternalContext()
-    internalContext.actionContext = {
-      actor: 'dependabot[bot]',
-      eventName: 'check_suite',
-      checkSuiteConclusion: 'success',
-      prNumbers: [1],
-      repo: {
-        repo: 'repo',
-        owner: 'owner'
-      }
-    }
-    internalContext.input = {
-      gitHubToken: 'token',
-      gitHubUser: 'dependabot[bot]',
-      reviewers: ['reviewer'],
-      teamReviewers: ['reviewer'],
-      semVerMatch: SemVer.Minor
-    }
+    process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
+    const context = new Context()
+    context.actor = 'dependabot[bot]'
+    context.eventName = 'check_suite'
 
     // act
-    const result = shouldProcess(internalContext)
+    const result = shouldProcess(context)
+
+    // assert
+    expect(result).toBeTruthy()
+  })
+
+  test('returns true when all conditions are met with workflow_run', async () => {
+    // arrange
+    process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
+    const context = new Context()
+    context.actor = 'dependabot[bot]'
+    context.eventName = 'check_suite'
+
+    // act
+    const result = shouldProcess(context)
 
     // assert
     expect(result).toBeTruthy()
@@ -34,55 +34,24 @@ describe('shouldProcess', () => {
 
   test('returns false when action is triggered by unsupported user', async () => {
     // arrange
-    const internalContext = new InternalContext()
-    internalContext.actionContext = {
-      actor: 'other[bot]',
-      eventName: 'check_suite',
-      checkSuiteConclusion: 'success',
-      prNumbers: [1],
-      repo: {
-        repo: 'repo',
-        owner: 'owner'
-      }
-    }
-    internalContext.input = {
-      gitHubToken: 'token',
-      gitHubUser: 'dependabot[bot]',
-      reviewers: ['reviewer'],
-      teamReviewers: ['reviewer'],
-      semVerMatch: SemVer.Minor
-    }
+    const context = new Context()
+    context.actor = 'some_user'
+    context.eventName = 'check_suite'
 
     // act
-    const result = shouldProcess(internalContext)
+    const result = shouldProcess(context)
 
     // assert
     expect(result).toBeFalsy()
   })
 
-  test('returns false when event is different from check_suite', async () => {
+  test('returns false when event is not supported', async () => {
     // arrange
-    const internalContext = new InternalContext()
-    internalContext.actionContext = {
-      actor: 'other[bot]',
-      eventName: 'workflow_run',
-      checkSuiteConclusion: 'neutral',
-      prNumbers: [1],
-      repo: {
-        repo: 'repo',
-        owner: 'owner'
-      }
-    }
-    internalContext.input = {
-      gitHubToken: 'token',
-      gitHubUser: 'dependabot[bot]',
-      reviewers: ['reviewer'],
-      teamReviewers: ['reviewer'],
-      semVerMatch: SemVer.Minor
-    }
+    const context = new Context()
+    context.eventName = 'some_other_event'
 
     // act
-    const result = shouldProcess(internalContext)
+    const result = shouldProcess(context)
 
     // assert
     expect(result).toBeFalsy()
@@ -90,7 +59,7 @@ describe('shouldProcess', () => {
 })
 
 describe('createInternalContext', () => {
-  test('returns InternalContext instance for check suite trigger', () => {
+  test('returns InternalContext instance for check_suite', () => {
     // arrange
     process.env.INPUT_GITHUB_TOKEN = 'github_token'
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
@@ -156,7 +125,7 @@ describe('createInternalContext', () => {
     })
   })
 
-  test('returns InternalContext instance for other trigger', () => {
+  test('returns InternalContext instance for workflow_run', () => {
     // arrange
     process.env.INPUT_GITHUB_TOKEN = 'github_token'
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
@@ -166,6 +135,14 @@ describe('createInternalContext', () => {
       actor: 'dependabot[bot]',
       eventName: 'workflow_run',
       payload: {
+        workflow_run: {
+          conclusion: 'success',
+          pull_requests: [
+            {
+              number: 1
+            }
+          ]
+        }
       },
       repo: {
         owner: 'repo_owner',
@@ -197,8 +174,8 @@ describe('createInternalContext', () => {
       actionContext: {
         actor: 'dependabot[bot]',
         eventName: 'workflow_run',
-        checkSuiteConclusion: '',
-        prNumbers: [],
+        checkSuiteConclusion: 'success',
+        prNumbers: [1],
         repo: {
           owner: 'repo_owner',
           repo: 'repo_name'
