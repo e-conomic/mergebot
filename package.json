@@ -21,12 +21,6 @@
     "prepare": "husky install",
     "husky:pre-commit": "npm run build:check && npm run test && lint-staged"
   },
-  "lint-staged": {
-    "*.ts": [
-      "npm run lint:fix",
-      "git add"
-    ]
-  },
   "engines": {
     "node": "16"
   },
