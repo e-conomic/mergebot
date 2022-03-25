@@ -56,12 +56,13 @@ class PullRequestService {
 
     if (versions.length === 1) {
       // Dependabot PR title contains two versions, current and new, in sem-ver format
-      // However, the analyzers don't play well with packages that use the MAJOR.MINOR.PATCH.BUILD format
-      // BUILD information is excluded by findVersions, returning a single version when BUILD is the only difference
+      // However, the analyzers don't play well with packages that use the MAJOR.MINOR.PATCH.BUILD or MAJOR formats
+      // One example is BUILD information is excluded by findVersions, returning a single version when BUILD is the only difference
       // In this case, it is basically a patch upgrade, so we can forgo further analysis
       // Also worth noting that semverDiff crashes with BUILD info in the string
-      info('Identified a single version that follows sem-ver rules. Defaulting to patch upgrade')
-      return SemVer.Patch
+      // However, because the analyzer doesn't recognize a package with just MAJOR, we will err on the side of caution
+      info('Identified a single version that follows sem-ver rules. Defaulting to major upgrade for safety')
+      return SemVer.Major
     }
 
     if (versions.length !== 2) {
