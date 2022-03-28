@@ -25,7 +25,7 @@ Below is a sample dependabot.yml. Notice the schedule is set to daily. This make
 
 # Mergebot config
 
-Below is a sample workflow that uses Mergebot. Mergebot supports the check_suite and workflow_run triggers, ensuring it only runs after all the other checks. The example workflow below shows how it can be configured in either case (Pull request there is the name of the workflow after which Mergebot should be triggered)
+Below is a sample workflow that uses Mergebot. Mergebot supports the check_suite and workflow_run triggers, ensuring it only runs after all the other checks. The example workflow below shows how it can be configured in either case ('Pull request' is the name of the workflow after which Mergebot should be triggered, so you'll need to replace that with your own)
 
     name: Mergebot
 
