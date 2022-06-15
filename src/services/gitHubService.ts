@@ -30,7 +30,7 @@ class GitHubService {
       }
     } catch (err) {
       error(`Cannot retrieve pull request ${request.prNumber}`)
-      error(JSON.stringify(err))
+      error(err as Error)
       return undefined
     }
   }
