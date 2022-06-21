@@ -30,7 +30,7 @@ async function determineToken (internalContext: InternalContext): Promise<string
     throw new Error()
   }
 
-  const appOctokit = new Octokit({
+  const client = new Octokit({
     authStrategy: createAppAuth,
     auth: {
       appId: internalContext.input.gitHubAppId,
@@ -40,9 +40,13 @@ async function determineToken (internalContext: InternalContext): Promise<string
   })
 
   // @ts-expect-error
-  const { token } = await appOctokit.auth({
+  const { token } = await client.auth({
     type: 'installation'
   })
+
+  if (!token) {
+    throw new Error('GitHub App authentication failed')
+  }
 
   return token
 }
