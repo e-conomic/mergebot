@@ -30,7 +30,11 @@ function createGitHubClient (internalContext: InternalContext): InstanceType<typ
   }
 
   return getOctokit('', {
-    authStrategy: createAppAuth,
+    authStrategy: createAppAuth({
+      appId: internalContext.input.gitHubAppId,
+      privateKey: internalContext.input.gitHubAppPrivateKey,
+      installationId: internalContext.input.gitHubAppInstallationId
+    }),
     auth: {
       appId: internalContext.input.gitHubAppId,
       privateKey: internalContext.input.gitHubAppPrivateKey,
