@@ -38,7 +38,7 @@ function createInternalContext (context: Context): InternalContext {
       repo: context.repo as ActionContextRepo
     },
     input: {
-      gitHubToken: getInput('github_token', { required: true }),
+      gitHubToken: getInput('github_token'),
       gitHubAppId: parseInt(getInput('github_app_id')) || 0,
       gitHubAppPrivateKey: getInput('github_app_private_key'),
       gitHubAppInstallationId: parseInt(getInput('github_app_installation_id')) || 0,
