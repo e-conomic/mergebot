@@ -5,6 +5,22 @@ import { createAppAuth } from '@octokit/auth-app'
 import { Octokit } from '@octokit/rest'
 import { InternalContext } from '../models/actionContextModels'
 
+function canAuthenticateAsApp (internalContext: InternalContext): boolean {
+  if (internalContext.input.gitHubAppId <= 0) {
+    error('Cannot authenticate as GitHub App, missing github_app_id')
+  }
+
+  if (!internalContext.input.gitHubAppPrivateKey) {
+    error('Cannot authenticate as GitHub App, missing github_app_private_key')
+  }
+
+  if (internalContext.input.gitHubAppInstallationId <= 0) {
+    error('Cannot authenticate as GitHub App, missing github_app_installation_id')
+  }
+
+  return true
+}
+
 async function determineToken (internalContext: InternalContext): Promise<string> {
   if (internalContext.input.gitHubToken) {
     return internalContext.input.gitHubToken
@@ -29,22 +45,6 @@ async function determineToken (internalContext: InternalContext): Promise<string
   })
 
   return token
-}
-
-function canAuthenticateAsApp (internalContext: InternalContext): boolean {
-  if (internalContext.input.gitHubAppId <= 0) {
-    error('Cannot authenticate as GitHub App, missing github_app_id')
-  }
-
-  if (!internalContext.input.gitHubAppPrivateKey) {
-    error('Cannot authenticate as GitHub App, missing github_app_private_key')
-  }
-
-  if (internalContext.input.gitHubAppInstallationId <= 0) {
-    error('Cannot authenticate as GitHub App, missing github_app_installation_id')
-  }
-
-  return true
 }
 
 async function createGitHubClient (internalContext: InternalContext): Promise<InstanceType<typeof GitHub>> {
