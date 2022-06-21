@@ -39,6 +39,9 @@ function createInternalContext (context: Context): InternalContext {
     },
     input: {
       gitHubToken: getInput('github_token', { required: true }),
+      gitHubAppId: parseInt(getInput('github_app_id')) || 0,
+      gitHubAppPrivateKey: getInput('github_app_private_key'),
+      gitHubAppInstallationId: parseInt(getInput('github_app_installation_id')) || 0,
       gitHubUser: getGitHubUser(),
       reviewers: splitStringIfNotEmpty(getInput('reviewers')),
       teamReviewers: splitStringIfNotEmpty(getInput('team_reviewers')),

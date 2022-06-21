@@ -47,6 +47,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
@@ -98,6 +101,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
@@ -150,6 +156,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
@@ -203,6 +212,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: ['team_reviewer'],
@@ -255,6 +267,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: [],
@@ -300,6 +315,9 @@ describe('handleEvent', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: [],
         teamReviewers: [],

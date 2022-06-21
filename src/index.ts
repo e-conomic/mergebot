@@ -1,13 +1,14 @@
 import { setFailed, error } from '@actions/core'
-import { context, getOctokit } from '@actions/github'
+import { context } from '@actions/github'
 import { InternalContext } from './models/actionContextModels'
 import { createInternalContext, shouldProcess } from './services/actionService'
 import { EventService } from './services/eventService'
+import { createGitHubClient } from './services/gitHubClientService'
 import { GitHubService } from './services/gitHubService'
 import { PullRequestService } from './services/pullRequestService'
 
-function createEventService (internalContext: InternalContext) {
-  const gitHubClient = getOctokit(internalContext.input.gitHubToken)
+function createEventService (internalContext: InternalContext): EventService {
+  const gitHubClient = createGitHubClient(internalContext)
   const gitHubService = new GitHubService(gitHubClient)
   const pullRequestService = new PullRequestService()
 
