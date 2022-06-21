@@ -34,12 +34,7 @@ function createGitHubClient (internalContext: InternalContext): InstanceType<typ
       appId: internalContext.input.gitHubAppId,
       privateKey: internalContext.input.gitHubAppPrivateKey,
       installationId: internalContext.input.gitHubAppInstallationId
-    }),
-    auth: {
-      appId: internalContext.input.gitHubAppId,
-      privateKey: internalContext.input.gitHubAppPrivateKey,
-      installationId: internalContext.input.gitHubAppInstallationId
-    }
+    })
   })
 }
 
