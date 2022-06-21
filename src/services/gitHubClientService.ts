@@ -1,7 +1,6 @@
 import { error } from '@actions/core'
 import { getOctokit } from '@actions/github'
 import { GitHub } from '@actions/github/lib/utils'
-import { createAppAuth } from '@octokit/auth-app'
 import { InternalContext } from '../models/actionContextModels'
 
 function canAuthenticateAsApp (internalContext: InternalContext): boolean {
@@ -30,11 +29,11 @@ function createGitHubClient (internalContext: InternalContext): InstanceType<typ
   }
 
   return getOctokit('', {
-    authStrategy: createAppAuth({
+    auth: {
       appId: internalContext.input.gitHubAppId,
       privateKey: internalContext.input.gitHubAppPrivateKey,
       installationId: internalContext.input.gitHubAppInstallationId
-    })
+    }
   })
 }
 
