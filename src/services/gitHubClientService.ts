@@ -2,6 +2,7 @@ import { error } from '@actions/core'
 import { getOctokit } from '@actions/github'
 import { GitHub } from '@actions/github/lib/utils'
 import { createAppAuth } from '@octokit/auth-app'
+import { Octokit } from '@octokit/rest'
 import { InternalContext } from '../models/actionContextModels'
 
 function canAuthenticateAsApp (internalContext: InternalContext): boolean {
@@ -20,22 +21,39 @@ function canAuthenticateAsApp (internalContext: InternalContext): boolean {
   return true
 }
 
-function createGitHubClient (internalContext: InternalContext): InstanceType<typeof GitHub> {
+async function determineToken (internalContext: InternalContext): Promise<string> {
   if (internalContext.input.gitHubToken) {
-    return getOctokit(internalContext.input.gitHubToken)
+    return internalContext.input.gitHubToken
   }
 
   if (!canAuthenticateAsApp(internalContext)) {
     throw new Error()
   }
 
-  return getOctokit('', {
-    authStrategy: createAppAuth({
+  const client = new Octokit({
+    authStrategy: createAppAuth,
+    auth: {
       appId: internalContext.input.gitHubAppId,
       privateKey: internalContext.input.gitHubAppPrivateKey,
       installationId: internalContext.input.gitHubAppInstallationId
-    })
+    }
   })
+
+  // @ts-expect-error
+  const { token } = await client.auth({
+    type: 'installation'
+  })
+
+  if (!token) {
+    throw new Error('GitHub App authentication failed')
+  }
+
+  return token
+}
+
+async function createGitHubClient (internalContext: InternalContext): Promise<InstanceType<typeof GitHub>> {
+  const token = await determineToken(internalContext)
+  return getOctokit(token)
 }
 
 export {
