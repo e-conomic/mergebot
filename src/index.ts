@@ -7,8 +7,8 @@ import { createGitHubClient } from './services/gitHubClientService'
 import { GitHubService } from './services/gitHubService'
 import { PullRequestService } from './services/pullRequestService'
 
-function createEventService (internalContext: InternalContext): EventService {
-  const gitHubClient = createGitHubClient(internalContext)
+async function createEventService (internalContext: InternalContext): Promise<EventService> {
+  const gitHubClient = await createGitHubClient(internalContext)
   const gitHubService = new GitHubService(gitHubClient)
   const pullRequestService = new PullRequestService()
 
@@ -21,7 +21,7 @@ async function start (): Promise<void> {
   }
 
   const ctx = createInternalContext(context)
-  const eventService = createEventService(ctx)
+  const eventService = await createEventService(ctx)
   await eventService.handleEvent(ctx)
 }
 

@@ -2,7 +2,34 @@ import { error } from '@actions/core'
 import { getOctokit } from '@actions/github'
 import { GitHub } from '@actions/github/lib/utils'
 import { createAppAuth } from '@octokit/auth-app'
+import { Octokit } from '@octokit/rest'
 import { InternalContext } from '../models/actionContextModels'
+
+async function determineToken (internalContext: InternalContext): Promise<string> {
+  if (internalContext.input.gitHubToken) {
+    return internalContext.input.gitHubToken
+  }
+
+  if (!canAuthenticateAsApp(internalContext)) {
+    throw new Error()
+  }
+
+  const appOctokit = new Octokit({
+    authStrategy: createAppAuth,
+    auth: {
+      appId: internalContext.input.gitHubAppId,
+      privateKey: internalContext.input.gitHubAppPrivateKey,
+      installationId: internalContext.input.gitHubAppInstallationId
+    }
+  })
+
+  // @ts-expect-error
+  const { token } = await appOctokit.auth({
+    type: 'installation'
+  })
+
+  return token
+}
 
 function canAuthenticateAsApp (internalContext: InternalContext): boolean {
   if (internalContext.input.gitHubAppId <= 0) {
@@ -20,22 +47,9 @@ function canAuthenticateAsApp (internalContext: InternalContext): boolean {
   return true
 }
 
-function createGitHubClient (internalContext: InternalContext): InstanceType<typeof GitHub> {
-  if (internalContext.input.gitHubToken) {
-    return getOctokit(internalContext.input.gitHubToken)
-  }
-
-  if (!canAuthenticateAsApp(internalContext)) {
-    throw new Error()
-  }
-
-  return getOctokit('', {
-    authStrategy: createAppAuth({
-      appId: internalContext.input.gitHubAppId,
-      privateKey: internalContext.input.gitHubAppPrivateKey,
-      installationId: internalContext.input.gitHubAppInstallationId
-    })
-  })
+async function createGitHubClient (internalContext: InternalContext): Promise<InstanceType<typeof GitHub>> {
+  const token = await determineToken(internalContext)
+  return getOctokit(token)
 }
 
 export {
