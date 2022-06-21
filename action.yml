@@ -6,8 +6,7 @@ inputs:
     default: dependabot[bot]
   github_token:
     description: Token for action. Default method for authentication
-    required: true
-    default: ${{ github.token }}
+    required: false
   github_app_id:
     description: GitHub App id
     required: false
