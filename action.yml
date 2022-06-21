@@ -1,12 +1,22 @@
 description: GitHub Action that automatically merges Dependabot PRs
 inputs:
   github_user:
-    description: Github user supported by action. Defaults to dependabot
+    description: GitHub user supported by action. Defaults to dependabot[bot]
     required: false
     default: dependabot[bot]
   github_token:
-    description: Token for action
+    description: Token for action. Default method for authentication
     required: true
+    default: ${{ github.token }}
+  github_app_id:
+    description: GitHub App id
+    required: false
+  github_app_private_key:
+    description: GitHub App private key
+    required: false
+  github_app_installation_id:
+    description: GitHub App installation id
+    required: false
   semver_match:
     description: major, minor or patch
     required: false

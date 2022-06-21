@@ -1,14 +1,14 @@
 class ActionContextRepo {
-    owner: string ='';
-    repo: string = '';
+  owner: string = ''
+  repo: string = ''
 }
 
 class ActionContext {
-    actor: string ='';
-    eventName: string = '';
-    checkSuiteConclusion: string = ''
-    prNumbers: number[] = []
-    repo: ActionContextRepo = new ActionContextRepo()
+  actor: string = ''
+  eventName: string = ''
+  checkSuiteConclusion: string = ''
+  prNumbers: number[] = []
+  repo: ActionContextRepo = new ActionContextRepo()
 }
 
 // eslint has some trouble understanding usages of enums
@@ -25,16 +25,19 @@ enum SemVer {
 }
 
 class ActionInput {
-    gitHubToken: string = '';
-    gitHubUser: string = '';
-    reviewers: string[] = [];
-    teamReviewers: string[] = [];
-    semVerMatch: SemVer = SemVer.Patch;
+  gitHubToken: string = ''
+  gitHubAppId: number = 0
+  gitHubAppPrivateKey: string = ''
+  gitHubAppInstallationId: number = 0
+  gitHubUser: string = ''
+  reviewers: string[] = []
+  teamReviewers: string[] = []
+  semVerMatch: SemVer = SemVer.Patch
 }
 
 class InternalContext {
-    actionContext: ActionContext = new ActionContext();
-    input: ActionInput = new ActionInput();
+  actionContext: ActionContext = new ActionContext()
+  input: ActionInput = new ActionInput()
 }
 
 export {

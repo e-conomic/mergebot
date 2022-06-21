@@ -26,6 +26,4 @@ jobs:
         run: npm run package
       - name: Run action
         uses: ./
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 5

@@ -1,7 +1,7 @@
 class GitHubRequestModel {
-    prNumber: number = 0
-    repoOwner: string = ''
-    repoName: string = ''
+  prNumber: number = 0
+  repoOwner: string = ''
+  repoName: string = ''
 }
 
 class GetPullRequestModel extends GitHubRequestModel {
@@ -19,9 +19,9 @@ class AddPrReviewersModel extends GitHubRequestModel {
 }
 
 class PullRequestModel {
-  number: number = 0;
-  title: string = '';
-  mergeable: boolean | null = null;
+  number: number = 0
+  title: string = ''
+  mergeable: boolean | null = null
 }
 
 export {

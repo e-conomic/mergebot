@@ -117,6 +117,9 @@ describe('createInternalContext', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
@@ -183,6 +186,9 @@ describe('createInternalContext', () => {
       },
       input: {
         gitHubToken: 'github_token',
+        gitHubAppId: 0,
+        gitHubAppPrivateKey: '',
+        gitHubAppInstallationId: 0,
         gitHubUser: 'dependabot[bot]',
         reviewers: ['individual_reviewer'],
         teamReviewers: [],
