@@ -1,6 +1,7 @@
 class ActionContextRepo {
   owner: string = ''
   repo: string = ''
+  id: number = 0
 }
 
 class ActionContext {
