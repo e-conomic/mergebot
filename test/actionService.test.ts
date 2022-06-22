@@ -76,6 +76,10 @@ describe('createInternalContext', () => {
               number: 1
             }
           ]
+        },
+        // @ts-expect-error
+        repository: {
+          id: 1
         }
       },
       repo: {
@@ -112,7 +116,8 @@ describe('createInternalContext', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 1
         }
       },
       input: {
@@ -145,6 +150,10 @@ describe('createInternalContext', () => {
               number: 1
             }
           ]
+        },
+        // @ts-expect-error
+        repository: {
+          id: 1
         }
       },
       repo: {
@@ -181,7 +190,8 @@ describe('createInternalContext', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 1
         }
       },
       input: {

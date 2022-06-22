@@ -42,7 +42,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {
@@ -96,7 +97,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {
@@ -151,7 +153,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {
@@ -207,7 +210,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {
@@ -262,7 +266,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {
@@ -310,7 +315,8 @@ describe('handleEvent', () => {
         prNumbers: [1],
         repo: {
           owner: 'repo_owner',
-          repo: 'repo_name'
+          repo: 'repo_name',
+          id: 0
         }
       },
       input: {

@@ -29,13 +29,16 @@ function determineEvent (context: Context): any {
 function createInternalContext (context: Context): InternalContext {
   const event = determineEvent(context)
 
+  const repo = context.repo as ActionContextRepo
+  repo.id = context.payload.repository!.id
+
   return {
     actionContext: {
       actor: context.actor,
       checkSuiteConclusion: event?.conclusion ?? '',
       eventName: context.eventName,
       prNumbers: event?.pull_requests.map((pr: { number: number }) => pr.number) ?? [],
-      repo: context.repo as ActionContextRepo
+      repo
     },
     input: {
       gitHubToken: getInput('github_token'),

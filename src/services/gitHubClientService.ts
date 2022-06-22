@@ -41,7 +41,8 @@ async function determineToken (internalContext: InternalContext): Promise<string
 
   // @ts-expect-error
   const { token } = await client.auth({
-    type: 'installation'
+    type: 'installation',
+    repositoryIds: [internalContext.actionContext.repo.id]
   })
 
   if (!token) {
