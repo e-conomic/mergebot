@@ -1,4 +1,4 @@
-import { error } from '@actions/core'
+import { error, info } from '@actions/core'
 import { GitHub } from '@actions/github/lib/utils'
 import {
   AddPrReviewersModel,
@@ -86,6 +86,8 @@ class GitHubService {
     if (input.length === 0) {
       return undefined
     }
+
+    info(`Adding ${input.length} reviewers: ${input.join(', ')}`)
 
     return input
   }
