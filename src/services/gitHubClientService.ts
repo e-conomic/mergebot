@@ -1,9 +1,10 @@
 import { error } from '@actions/core'
 import { getOctokit } from '@actions/github'
 import { GitHub } from '@actions/github/lib/utils'
-import { createAppAuth } from '@octokit/auth-app'
 import { Octokit } from '@octokit/rest'
 import { InternalContext } from '../models/actionContextModels'
+
+const createAppAuth = require('@octokit/auth-app')
 
 function canAuthenticateAsApp (internalContext: InternalContext): boolean {
   if (internalContext.input.gitHubAppId <= 0) {
