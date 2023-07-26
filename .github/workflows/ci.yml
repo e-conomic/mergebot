@@ -31,11 +31,6 @@ jobs:
       - name: Package action
         run: npm run package
 
-      - name: Run action
-        uses: ./
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -63,8 +58,6 @@ jobs:
         with:
           name: dist
           path: ./dist
-
-      - run: ls
 
       - name: Run action
         uses: ./
