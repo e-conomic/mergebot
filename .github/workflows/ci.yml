@@ -29,4 +29,22 @@ jobs:
         uses: ./
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: action
+          path: ./
     timeout-minutes: 5
+  run:
+    name: Run
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: action
+      - name: Run action
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
