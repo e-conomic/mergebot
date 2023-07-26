@@ -1,6 +1,6 @@
 name: Continuous Delivery
 
-on: 
+on:
   push:
     branches:
       - master
