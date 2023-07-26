@@ -1,9 +1,10 @@
 name: Continuous Integration
 
-on: 
+on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   test:
