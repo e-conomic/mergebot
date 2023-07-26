@@ -56,7 +56,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: action
+          name: action.yml
 
       - name: Download artifact
         uses: actions/download-artifact@v3
