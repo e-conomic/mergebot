@@ -62,7 +62,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist
-          path: .
+          path: ./dist
 
       - run: ls
 
