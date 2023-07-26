@@ -4,6 +4,8 @@ updates:
     directory: /
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "@octokit/rest"
   - package-ecosystem: github-actions
     directory: /
     schedule:
