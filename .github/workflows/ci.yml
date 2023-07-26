@@ -47,6 +47,7 @@ jobs:
     name: Run
     runs-on: ubuntu-latest
     needs: test
+    timeout-minutes: 1
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v3
