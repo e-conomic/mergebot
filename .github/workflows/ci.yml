@@ -64,6 +64,8 @@ jobs:
           name: dist
           path: .
 
+      - run: ls
+
       - name: Run action
         uses: ./
         with:
