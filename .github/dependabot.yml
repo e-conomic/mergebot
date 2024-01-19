@@ -6,6 +6,7 @@ updates:
       interval: daily
     ignore:
       - dependency-name: "@octokit/rest"
+      - dependency-name: "@octokit/auth-app"
   - package-ecosystem: github-actions
     directory: /
     schedule:
