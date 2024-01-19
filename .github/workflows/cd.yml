@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.MERGEBOT_TOKEN }}
 
       - name: Select Node.js version
         uses: actions/setup-node@v4
@@ -32,8 +30,8 @@ jobs:
 
       - name: Create tag
         run: |
-          git config --global user.name '{{ secrets.MERGEBOT_USER_NAME }}'
-          git config --global user.email '{{ secrets.MERGEBOT_USER_EMAIL }}'
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
           git add dist
           git commit -m "Update action"
           git push origin :refs/tags/'v${{ secrets.MERGEBOT_MAJOR }}'
