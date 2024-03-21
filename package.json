@@ -44,7 +44,7 @@
     "semver-diff": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-env": "^7.24.1",
     "@types/jest": "^27.5.0",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
