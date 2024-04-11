@@ -22,7 +22,7 @@
     "husky:pre-commit": "lint-staged"
   },
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "repository": {
     "type": "git",
