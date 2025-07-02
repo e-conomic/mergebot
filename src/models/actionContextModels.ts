@@ -13,16 +13,16 @@ class ActionContext {
 }
 
 // eslint has some trouble understanding usages of enums
-// eslint-disable-next-line no-unused-vars
+
 enum SemVer {
-    // eslint-disable-next-line no-unused-vars
-    Patch = 1,
-    // eslint-disable-next-line no-unused-vars
-    Minor = 2,
-    // eslint-disable-next-line no-unused-vars
-    Major = 3,
-    // eslint-disable-next-line no-unused-vars
-    Other = 4
+
+  Patch = 1,
+
+  Minor = 2,
+
+  Major = 3,
+
+  Other = 4
 }
 
 class ActionInput {

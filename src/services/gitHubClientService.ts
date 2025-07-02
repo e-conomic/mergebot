@@ -5,7 +5,7 @@ import { Octokit } from '@octokit/rest'
 import { InternalContext } from '../models/actionContextModels'
 import { createAppAuth } from '@octokit/auth-app'
 
-function canAuthenticateAsApp(internalContext: InternalContext): boolean {
+function canAuthenticateAsApp (internalContext: InternalContext): boolean {
   if (internalContext.input.gitHubAppId <= 0) {
     error('Cannot authenticate as GitHub App, missing github_app_id')
   }
@@ -21,13 +21,13 @@ function canAuthenticateAsApp(internalContext: InternalContext): boolean {
   return true
 }
 
-async function determineToken(internalContext: InternalContext): Promise<string> {
+async function determineToken (internalContext: InternalContext): Promise<string> {
   if (internalContext.input.gitHubToken) {
     return internalContext.input.gitHubToken
   }
 
   if (!canAuthenticateAsApp(internalContext)) {
-    throw new Error("Cannot authenticate mergebot")
+    throw new Error('Cannot authenticate mergebot')
   }
 
   const client = new Octokit({
@@ -52,7 +52,7 @@ async function determineToken(internalContext: InternalContext): Promise<string>
   return token
 }
 
-async function createGitHubClient(internalContext: InternalContext): Promise<InstanceType<typeof GitHub>> {
+async function createGitHubClient (internalContext: InternalContext): Promise<InstanceType<typeof GitHub>> {
   const token = await determineToken(internalContext)
   return getOctokit(token)
 }
