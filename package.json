@@ -41,7 +41,7 @@
     "@octokit/auth-app": "7.1.4",
     "@octokit/rest": "21.1.0",
     "find-versions": "6.0.0",
-    "semver-diff": "4.0.0"
+    "semver-diff": "5.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.27.2",
