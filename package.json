@@ -55,7 +55,7 @@
     "neostandard": "^0.12.2",
     "husky": "9.1.7",
     "jest": "30.2.0",
-    "lint-staged": "16.2.6",
+    "lint-staged": "16.2.7",
     "rimraf": "6.1.0",
     "ts-jest": "29.4.5",
     "typescript": "5.9.3"
