@@ -1,18 +1,43 @@
-import { Context } from '@actions/github/lib/context'
+import { context } from '@actions/github'
 import { describe, expect, test } from '@jest/globals'
 import { SemVer } from '../src/models/actionContextModels'
 import { createInternalContext, shouldProcess } from '../src/services/actionService'
+
+type Context = typeof context
+
+function createMockContext (overrides: Partial<Context>): Context {
+  return {
+    actor: '',
+    eventName: '',
+    payload: {},
+    repo: { owner: '', repo: '' },
+    sha: '',
+    ref: '',
+    workflow: '',
+    action: '',
+    job: '',
+    runNumber: 0,
+    runId: 0,
+    runAttempt: 0,
+    issue: { owner: '', repo: '', number: 0 },
+    apiUrl: '',
+    serverUrl: '',
+    graphqlUrl: '',
+    ...overrides
+  }
+}
 
 describe('shouldProcess', () => {
   test('returns true when all conditions are met with check_suite', async () => {
     // arrange
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
-    const context = new Context()
-    context.actor = 'dependabot[bot]'
-    context.eventName = 'check_suite'
+    const ctx = createMockContext({
+      actor: 'dependabot[bot]',
+      eventName: 'check_suite'
+    })
 
     // act
-    const result = shouldProcess(context)
+    const result = shouldProcess(ctx)
 
     // assert
     expect(result).toBeTruthy()
@@ -21,12 +46,13 @@ describe('shouldProcess', () => {
   test('returns true when all conditions are met with workflow_run', async () => {
     // arrange
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
-    const context = new Context()
-    context.actor = 'dependabot[bot]'
-    context.eventName = 'check_suite'
+    const ctx = createMockContext({
+      actor: 'dependabot[bot]',
+      eventName: 'check_suite'
+    })
 
     // act
-    const result = shouldProcess(context)
+    const result = shouldProcess(ctx)
 
     // assert
     expect(result).toBeTruthy()
@@ -34,12 +60,13 @@ describe('shouldProcess', () => {
 
   test('returns false when action is triggered by unsupported user', async () => {
     // arrange
-    const context = new Context()
-    context.actor = 'some_user'
-    context.eventName = 'check_suite'
+    const ctx = createMockContext({
+      actor: 'some_user',
+      eventName: 'check_suite'
+    })
 
     // act
-    const result = shouldProcess(context)
+    const result = shouldProcess(ctx)
 
     // assert
     expect(result).toBeFalsy()
@@ -47,11 +74,12 @@ describe('shouldProcess', () => {
 
   test('returns false when event is not supported', async () => {
     // arrange
-    const context = new Context()
-    context.eventName = 'some_other_event'
+    const ctx = createMockContext({
+      eventName: 'some_other_event'
+    })
 
     // act
-    const result = shouldProcess(context)
+    const result = shouldProcess(ctx)
 
     // assert
     expect(result).toBeFalsy()
@@ -65,7 +93,7 @@ describe('createInternalContext', () => {
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
     process.env.INPUT_REVIEWERS = 'individual_reviewer'
 
-    const context: Context = {
+    const ctx = createMockContext({
       actor: 'dependabot[bot]',
       eventName: 'check_suite',
       payload: {
@@ -77,34 +105,20 @@ describe('createInternalContext', () => {
             }
           ]
         },
-        // @ts-expect-error
         repository: {
-          id: 1
+          id: 1,
+          name: 'repo_name',
+          owner: { login: 'repo_owner', name: 'repo_owner' }
         }
       },
       repo: {
         owner: 'repo_owner',
         repo: 'repo_name'
-      },
-      sha: '',
-      ref: '',
-      workflow: '',
-      action: '',
-      job: '',
-      runNumber: 1,
-      runId: 1,
-      issue: {
-        owner: '',
-        repo: '',
-        number: 1
-      },
-      apiUrl: '',
-      serverUrl: '',
-      graphqlUrl: ''
-    }
+      }
+    })
 
     // act
-    const result = createInternalContext(context)
+    const result = createInternalContext(ctx)
 
     // assert
     expect(result).toBeDefined()
@@ -139,7 +153,7 @@ describe('createInternalContext', () => {
     process.env.INPUT_GITHUB_USER = 'dependabot[bot]'
     process.env.INPUT_REVIEWERS = 'individual_reviewer'
 
-    const context: Context = {
+    const ctx = createMockContext({
       actor: 'dependabot[bot]',
       eventName: 'workflow_run',
       payload: {
@@ -151,34 +165,20 @@ describe('createInternalContext', () => {
             }
           ]
         },
-        // @ts-expect-error
         repository: {
-          id: 1
+          id: 1,
+          name: 'repo_name',
+          owner: { login: 'repo_owner', name: 'repo_owner' }
         }
       },
       repo: {
         owner: 'repo_owner',
         repo: 'repo_name'
-      },
-      sha: '',
-      ref: '',
-      workflow: '',
-      action: '',
-      job: '',
-      runNumber: 1,
-      runId: 1,
-      issue: {
-        owner: '',
-        repo: '',
-        number: 1
-      },
-      apiUrl: '',
-      serverUrl: '',
-      graphqlUrl: ''
-    }
+      }
+    })
 
     // act
-    const result = createInternalContext(context)
+    const result = createInternalContext(ctx)
 
     // assert
     expect(result).toBeDefined()

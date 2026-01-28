@@ -1,7 +1,9 @@
 import { getInput, warning } from '@actions/core'
+import { context } from '@actions/github'
 import { ActionContextRepo, InternalContext, SemVer } from '../models/actionContextModels'
 import { determineSemVer } from './semVerService'
-import { Context } from '@actions/github/lib/context'
+
+type Context = typeof context
 
 function splitStringIfNotEmpty (input: string): string[] {
   if (!input) {
