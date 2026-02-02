@@ -1,344 +1,196 @@
-import { beforeEach, describe, expect, jest, test } from '@jest/globals'
+import { describe, expect, jest, test } from '@jest/globals'
 import { InternalContext, SemVer } from '../src/models/actionContextModels'
-import {
-  AddPrReviewersModel,
-  ApprovePullRequestModel,
-  GetPullRequestModel,
-  MergePullRequestModel,
-  PullRequestModel
-} from '../src/models/gitHubModels'
+import { PullRequestModel } from '../src/models/gitHubModels'
 import { EventService } from '../src/services/eventService'
 import { PullRequestService } from '../src/services/pullRequestService'
+import { GitHubService } from '../src/services/gitHubService'
+
+/**
+ * Helper to create a fake GitHubService for testing.
+ * This avoids module-level mocking and makes tests simpler.
+ */
+function createFakeGitHubService (options: {
+  pullRequest?: PullRequestModel | undefined
+  approvePullRequestResult?: boolean
+  mergePullRequestResult?: boolean
+}): GitHubService {
+  return {
+    getPullRequest: jest.fn<() => Promise<PullRequestModel | undefined>>()
+      .mockResolvedValue(options.pullRequest),
+    approvePullRequest: jest.fn<() => Promise<boolean>>()
+      .mockResolvedValue(options.approvePullRequestResult ?? true),
+    mergePullRequest: jest.fn<() => Promise<boolean>>()
+      .mockResolvedValue(options.mergePullRequestResult ?? true),
+    addPrReviewers: jest.fn<() => Promise<void>>()
+      .mockResolvedValue(undefined)
+  } as unknown as GitHubService
+}
+
+/**
+ * Helper to create a standard test context.
+ */
+function createTestContext (overrides?: Partial<InternalContext['input']>): InternalContext {
+  return {
+    actionContext: {
+      actor: 'dependabot[bot]',
+      checkSuiteConclusion: 'success',
+      eventName: 'check_suite',
+      prNumbers: [1],
+      repo: {
+        owner: 'repo_owner',
+        repo: 'repo_name',
+        id: 0
+      }
+    },
+    input: {
+      gitHubToken: 'github_token',
+      gitHubAppId: 0,
+      gitHubAppPrivateKey: '',
+      gitHubAppInstallationId: 0,
+      gitHubUser: 'dependabot[bot]',
+      reviewers: [],
+      teamReviewers: [],
+      semVerMatch: SemVer.Patch,
+      ...overrides
+    }
+  }
+}
 
 describe('handleEvent', () => {
-  beforeEach(() => { jest.resetModules() })
-
-  test('processes event sucessfully', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(true)
-          }
-        })
+  test('processes event successfully', async () => {
+    // Arrange - create a fake GitHubService that returns a mergeable PR
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: {
+        mergeable: true,
+        number: 1,
+        title: 'Bump package from v1.0.1 to v1.0.2'
       }
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: ['individual_reviewer'],
-        teamReviewers: [],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext({ reviewers: ['individual_reviewer'] })
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - PR was fetched, approved, and merged
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.mergePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.addPrReviewers).not.toHaveBeenCalled()
   })
 
   test('adds reviewers to PR when PR is not mergeable', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: false,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
-          }
-        })
+    // Arrange - PR is not mergeable
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: {
+        mergeable: false,
+        number: 1,
+        title: 'Bump package from v1.0.1 to v1.0.2'
       }
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: ['individual_reviewer'],
-        teamReviewers: [],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext({ reviewers: ['individual_reviewer'] })
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - reviewers should be added since PR can't be merged
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.addPrReviewers).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).not.toHaveBeenCalled()
+    expect(fakeGitHub.mergePullRequest).not.toHaveBeenCalled()
   })
 
   test('adds reviewers to PR when PR cannot be approved', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(false),
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
-          }
-        })
-      }
+    // Arrange - approval fails
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: {
+        mergeable: true,
+        number: 1,
+        title: 'Bump package from v1.0.1 to v1.0.2'
+      },
+      approvePullRequestResult: false
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: ['individual_reviewer'],
-        teamReviewers: [],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext({ reviewers: ['individual_reviewer'] })
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - reviewers should be added since approval failed
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.addPrReviewers).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.mergePullRequest).not.toHaveBeenCalled()
   })
 
   test('adds reviewers to PR when PR cannot be merged', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false),
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
-          }
-        })
-      }
+    // Arrange - merge fails
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: {
+        mergeable: true,
+        number: 1,
+        title: 'Bump package from v1.0.1 to v1.0.2'
+      },
+      mergePullRequestResult: false
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: [],
-        teamReviewers: ['team_reviewer'],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext({ teamReviewers: ['team_reviewer'] })
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - reviewers should be added since merge failed
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.mergePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.addPrReviewers).toHaveBeenCalledTimes(1)
   })
 
-  test('does not add reviewers to PR when PR cannot be merged', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false)
-          }
-        })
-      }
+  test('does not add reviewers when PR cannot be merged and no reviewers configured', async () => {
+    // Arrange - merge fails but no reviewers are configured
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: {
+        mergeable: true,
+        number: 1,
+        title: 'Bump package from v1.0.1 to v1.0.2'
+      },
+      mergePullRequestResult: false
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: [],
-        teamReviewers: [],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext({ reviewers: [], teamReviewers: [] })
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - no reviewers to add
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.mergePullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.addPrReviewers).not.toHaveBeenCalled()
   })
 
-  test('does not process when PRs cannot be retrieved', async () => {
-    // arrange
-    jest.mock('../src/services/gitHubService', () => {
-      return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              return Promise.resolve(undefined)
-            }
-          }
-        })
-      }
+  test('does not process when PR cannot be retrieved', async () => {
+    // Arrange - PR fetch returns undefined
+    const fakeGitHub = createFakeGitHubService({
+      pullRequest: undefined
     })
 
-    const internalContext: InternalContext = {
-      actionContext: {
-        actor: 'dependabot[bot]',
-        checkSuiteConclusion: 'success',
-        eventName: 'check_suite',
-        prNumbers: [1],
-        repo: {
-          owner: 'repo_owner',
-          repo: 'repo_name',
-          id: 0
-        }
-      },
-      input: {
-        gitHubToken: 'github_token',
-        gitHubAppId: 0,
-        gitHubAppPrivateKey: '',
-        gitHubAppInstallationId: 0,
-        gitHubUser: 'dependabot[bot]',
-        reviewers: [],
-        teamReviewers: [],
-        semVerMatch: SemVer.Patch
-      }
-    }
+    const context = createTestContext()
+    const eventService = new EventService(fakeGitHub, new PullRequestService())
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
-    const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
+    // Act
+    await eventService.handleEvent(context)
 
-    // act
-    await checkSuiteService.handleEvent(internalContext)
-
-    // assert
-    expect(GitHubService).toHaveBeenCalledTimes(1)
+    // Assert - nothing else should be called
+    expect(fakeGitHub.getPullRequest).toHaveBeenCalledTimes(1)
+    expect(fakeGitHub.approvePullRequest).not.toHaveBeenCalled()
+    expect(fakeGitHub.mergePullRequest).not.toHaveBeenCalled()
+    expect(fakeGitHub.addPrReviewers).not.toHaveBeenCalled()
   })
 })
