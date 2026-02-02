@@ -9,30 +9,33 @@ import {
 } from '../src/models/gitHubModels'
 import { EventService } from '../src/services/eventService'
 import { PullRequestService } from '../src/services/pullRequestService'
+import type { GitHubService } from '../src/services/gitHubService'
+
+type MockGitHubServiceModule = { GitHubService: jest.Mock }
 
 describe('handleEvent', () => {
   beforeEach(() => { jest.resetModules() })
 
   test('processes event sucessfully', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(true)
+        getPullRequest: (_: GetPullRequestModel) => {
+          const pullRequest: PullRequestModel = {
+            mergeable: true,
+            number: 1,
+            title: 'Bump package from v1.0.1 to v1.0.2'
           }
-        })
+          return Promise.resolve(pullRequest)
+        },
+        approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
+        mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(true)
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -58,8 +61,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
@@ -71,23 +74,23 @@ describe('handleEvent', () => {
 
   test('adds reviewers to PR when PR is not mergeable', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: false,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
+        getPullRequest: (_: GetPullRequestModel) => {
+          const pullRequest: PullRequestModel = {
+            mergeable: false,
+            number: 1,
+            title: 'Bump package from v1.0.1 to v1.0.2'
           }
-        })
+          return Promise.resolve(pullRequest)
+        },
+        addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -113,8 +116,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
@@ -126,24 +129,24 @@ describe('handleEvent', () => {
 
   test('adds reviewers to PR when PR cannot be approved', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(false),
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
+        getPullRequest: (_: GetPullRequestModel) => {
+          const pullRequest: PullRequestModel = {
+            mergeable: true,
+            number: 1,
+            title: 'Bump package from v1.0.1 to v1.0.2'
           }
-        })
+          return Promise.resolve(pullRequest)
+        },
+        approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(false),
+        addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -169,8 +172,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
@@ -182,25 +185,25 @@ describe('handleEvent', () => {
 
   test('adds reviewers to PR when PR cannot be merged', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false),
-            addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
+        getPullRequest: (_: GetPullRequestModel) => {
+          const pullRequest: PullRequestModel = {
+            mergeable: true,
+            number: 1,
+            title: 'Bump package from v1.0.1 to v1.0.2'
           }
-        })
+          return Promise.resolve(pullRequest)
+        },
+        approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
+        mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false),
+        addPrReviewers: (_: AddPrReviewersModel) => Promise.resolve()
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -226,8 +229,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
@@ -239,24 +242,24 @@ describe('handleEvent', () => {
 
   test('does not add reviewers to PR when PR cannot be merged', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              const pullRequest: PullRequestModel = {
-                mergeable: true,
-                number: 1,
-                title: 'Bump package from v1.0.1 to v1.0.2'
-              }
-              return Promise.resolve(pullRequest)
-            },
-            approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
-            mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false)
+        getPullRequest: (_: GetPullRequestModel) => {
+          const pullRequest: PullRequestModel = {
+            mergeable: true,
+            number: 1,
+            title: 'Bump package from v1.0.1 to v1.0.2'
           }
-        })
+          return Promise.resolve(pullRequest)
+        },
+        approvePullRequest: (_: ApprovePullRequestModel) => Promise.resolve(true),
+        mergePullRequest: (_: MergePullRequestModel) => Promise.resolve(false)
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -282,8 +285,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act
@@ -295,17 +298,17 @@ describe('handleEvent', () => {
 
   test('does not process when PRs cannot be retrieved', async () => {
     // arrange
-    jest.mock('../src/services/gitHubService', () => {
+    const mockGitHubService = jest.fn().mockImplementation(() => {
       return {
-        GitHubService: jest.fn().mockImplementation(() => {
-          return {
-            getPullRequest: (_: GetPullRequestModel) => {
-              return Promise.resolve(undefined)
-            }
-          }
-        })
+        getPullRequest: (_: GetPullRequestModel) => {
+          return Promise.resolve(undefined)
+        }
       }
     })
+
+    jest.unstable_mockModule('../src/services/gitHubService', () => ({
+      GitHubService: mockGitHubService
+    }))
 
     const internalContext: InternalContext = {
       actionContext: {
@@ -331,8 +334,8 @@ describe('handleEvent', () => {
       }
     }
 
-    const { GitHubService } = require('../src/services/gitHubService')
-    const gitHubServiceInstance = new GitHubService()
+    const { GitHubService } = await import('../src/services/gitHubService') as unknown as MockGitHubServiceModule
+    const gitHubServiceInstance = new GitHubService() as unknown as GitHubService
     const checkSuiteService = new EventService(gitHubServiceInstance, new PullRequestService())
 
     // act

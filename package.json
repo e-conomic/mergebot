@@ -13,7 +13,7 @@
     "lint:fix": "npm run lint -- --fix",
     "package": "npm run clean:package && npm run build && npm run package:single",
     "package:single": "ncc build --out dist --minify --source-map --v8-cache",
-    "test": "jest",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
     "test:ci": "npm run test -- --ci",
     "test:coverage": "npm run test -- --collect-coverage",
     "test:watch": "npm run test:coverage -- --watch --verbose false",
