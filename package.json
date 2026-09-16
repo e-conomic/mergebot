@@ -65,6 +65,6 @@
     "@stylistic/eslint-plugin": "3.1.0",
     "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react": "7.37.5",
-    "undici": ">=6.28.0"
+    "undici": ">=8.10.2"
   }
 }
